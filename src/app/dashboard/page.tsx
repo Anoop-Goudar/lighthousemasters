@@ -1,5 +1,6 @@
 "use client";
 
+import { Building2, MapPin } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -45,6 +46,38 @@ export default function DashboardPage() {
 							</Link>
 						</CardContent>
 					</Card>
+
+					<Card>
+						<CardHeader>
+							<CardTitle>Facilities</CardTitle>
+							<CardDescription>Browse and book facilities</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<Link href="/facilities">
+								<Button className="w-full">
+									<MapPin className="h-4 w-4 mr-2" />
+									View Facilities
+								</Button>
+							</Link>
+						</CardContent>
+					</Card>
+
+					{session.user?.role === "admin" && (
+						<Card>
+							<CardHeader>
+								<CardTitle>Admin Panel</CardTitle>
+								<CardDescription>Manage facilities and system</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<Link href="/admin/facilities">
+									<Button className="w-full">
+										<Building2 className="h-4 w-4 mr-2" />
+										Manage Facilities
+									</Button>
+								</Link>
+							</CardContent>
+						</Card>
+					)}
 
 					<Card>
 						<CardHeader>
