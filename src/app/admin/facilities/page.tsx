@@ -39,19 +39,19 @@ export default function AdminFacilitiesPage() {
 		}
 	}, [session, status, router]);
 
-	const fetchFacilities = async () => {
-		try {
-			const response = await fetch("/api/facilities");
-			const data = await response.json();
-			setFacilities(data.facilities || []);
-		} catch (error) {
-			console.error("Error fetching facilities:", error);
-		}
-	};
-
 	useEffect(() => {
+		const fetchFacilities = async () => {
+			try {
+				const response = await fetch("/api/facilities");
+				const data = await response.json();
+				setFacilities(data.facilities || []);
+			} catch (error) {
+				console.error("Error fetching facilities:", error);
+			}
+		};
+
 		fetchFacilities();
-	}, [fetchFacilities]);
+	}, []);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -72,7 +72,7 @@ export default function AdminFacilitiesPage() {
 					availabilitySchedule: [],
 				});
 				setShowCreateForm(false);
-				fetchFacilities();
+				window.location.reload();
 			} else {
 				const error = await response.json();
 				console.error("Error creating facility:", error);
@@ -92,8 +92,8 @@ export default function AdminFacilitiesPage() {
 				method: "DELETE",
 			});
 
-			if (response.ok) {
-				fetchFacilities();
+		if (response.ok) {
+			window.location.reload();
 			} else {
 				const error = await response.json();
 				console.error("Error deleting facility:", error);

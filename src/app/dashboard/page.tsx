@@ -1,10 +1,10 @@
 "use client";
 
-import { Building2, MapPin } from "lucide-react";
+import { Building2, MapPin, ClipboardList } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -79,6 +79,23 @@ export default function DashboardPage() {
 						</Card>
 					)}
 
+					{session.user?.role === "coach" && (
+						<Card>
+							<CardHeader>
+								<CardTitle>Training Logs</CardTitle>
+								<CardDescription>Manage training sessions</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<Link href="/coach/training-logs">
+									<Button className="w-full">
+										<ClipboardList className="h-4 w-4 mr-2" />
+										Manage Training Logs
+									</Button>
+								</Link>
+							</CardContent>
+						</Card>
+					)}
+
 					<Card>
 						<CardHeader>
 							<CardTitle>Your Role</CardTitle>
@@ -99,7 +116,82 @@ export default function DashboardPage() {
 						</CardContent>
 					</Card>
 				</div>
+
+				<div className="mt-8">
+					<h2 className="text-2xl font-bold text-gray-900 mb-4">Recent Training Sessions</h2>
+					<TrainingSessionHistory userId={session.user.id} />
+				</div>
 			</div>
+		</div>
+	);
+}
+
+interface TrainingLogData {
+	_id: string;
+	activityType: string;
+	sessionDate: string;
+	notes?: string;
+	performanceMetrics?: {
+		duration?: number;
+		rating?: number;
+	};
+}
+
+function TrainingSessionHistory({ userId }: { userId: string }) {
+	const [trainingLogs, setTrainingLogs] = useState<TrainingLogData[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchTrainingLogs = async () => {
+			try {
+				const response = await fetch(`/api/training-logs?userId=${userId}`);
+				const data = await response.json();
+				setTrainingLogs(data.trainingLogs || []);
+			} catch (error) {
+				console.error("Error fetching training logs:", error);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		fetchTrainingLogs();
+	}, [userId]);
+
+	if (isLoading) {
+		return <div>Loading training sessions...</div>;
+	}
+
+	if (trainingLogs.length === 0) {
+		return (
+			<Card>
+				<CardContent className="pt-6">
+					<p className="text-gray-500 text-center">No training sessions recorded yet.</p>
+				</CardContent>
+			</Card>
+		);
+	}
+
+	return (
+		<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+			{trainingLogs.slice(0, 6).map((log) => (
+				<Card key={log._id}>
+					<CardHeader>
+						<CardTitle className="text-lg">{log.activityType}</CardTitle>
+						<CardDescription>
+							{new Date(log.sessionDate).toLocaleDateString()}
+						</CardDescription>
+					</CardHeader>
+					<CardContent>
+						{log.notes && <p className="text-sm text-gray-600 mb-2">{log.notes}</p>}
+						{log.performanceMetrics && (
+							<div className="flex gap-4 text-sm text-gray-500">
+								{log.performanceMetrics.duration && <span>{log.performanceMetrics.duration} min</span>}
+								{log.performanceMetrics.rating && <span>{log.performanceMetrics.rating}/5 ⭐</span>}
+							</div>
+						)}
+					</CardContent>
+				</Card>
+			))}
 		</div>
 	);
 }
