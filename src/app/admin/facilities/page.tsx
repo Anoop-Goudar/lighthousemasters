@@ -39,10 +39,6 @@ export default function AdminFacilitiesPage() {
 		}
 	}, [session, status, router]);
 
-	useEffect(() => {
-		fetchFacilities();
-	}, [fetchFacilities]);
-
 	const fetchFacilities = async () => {
 		try {
 			const response = await fetch("/api/facilities");
@@ -52,6 +48,10 @@ export default function AdminFacilitiesPage() {
 			console.error("Error fetching facilities:", error);
 		}
 	};
+
+	useEffect(() => {
+		fetchFacilities();
+	}, [fetchFacilities]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
