@@ -37,22 +37,6 @@ export default function FacilitiesPage() {
 		notes: "",
 	});
 
-	useEffect(() => {
-		if (status === "unauthenticated") {
-			router.push("/auth/signin");
-		}
-	}, [status, router]);
-
-	useEffect(() => {
-		fetchFacilities();
-	}, [fetchFacilities]);
-
-	useEffect(() => {
-		if (selectedFacility) {
-			fetchBookings(selectedFacility._id!);
-		}
-	}, [selectedFacility, fetchBookings]);
-
 	const fetchFacilities = async () => {
 		try {
 			const response = await fetch("/api/facilities");
@@ -72,6 +56,22 @@ export default function FacilitiesPage() {
 			console.error("Error fetching bookings:", error);
 		}
 	};
+
+	useEffect(() => {
+		if (status === "unauthenticated") {
+			router.push("/auth/signin");
+		}
+	}, [status, router]);
+
+	useEffect(() => {
+		fetchFacilities();
+	}, []);
+
+	useEffect(() => {
+		if (selectedFacility) {
+			fetchBookings(selectedFacility._id!);
+		}
+	}, [selectedFacility]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
