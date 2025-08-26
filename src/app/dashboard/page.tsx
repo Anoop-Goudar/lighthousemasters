@@ -1,12 +1,13 @@
 "use client";
 
-import { Building2, MapPin, ClipboardList } from "lucide-react";
+import { Building2, MapPin, ClipboardList, BarChart3 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { NotificationDropdown } from "@/components/NotificationDropdown";
 
 export default function DashboardPage() {
 	const { data: session, status } = useSession();
@@ -29,9 +30,12 @@ export default function DashboardPage() {
 	return (
 		<div className="min-h-screen bg-gray-50 py-8">
 			<div className="max-w-4xl mx-auto px-4">
-				<div className="mb-8">
-					<h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-					<p className="text-gray-600">Welcome back, {session.user?.name}!</p>
+				<div className="mb-8 flex justify-between items-center">
+					<div>
+						<h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+						<p className="text-gray-600">Welcome back, {session.user?.name}!</p>
+					</div>
+					<NotificationDropdown />
 				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -63,20 +67,37 @@ export default function DashboardPage() {
 					</Card>
 
 					{session.user?.role === "admin" && (
-						<Card>
-							<CardHeader>
-								<CardTitle>Admin Panel</CardTitle>
-								<CardDescription>Manage facilities and system</CardDescription>
-							</CardHeader>
-							<CardContent>
-								<Link href="/admin/facilities">
-									<Button className="w-full">
-										<Building2 className="h-4 w-4 mr-2" />
-										Manage Facilities
-									</Button>
-								</Link>
-							</CardContent>
-						</Card>
+						<>
+							<Card>
+								<CardHeader>
+									<CardTitle>Admin Panel</CardTitle>
+									<CardDescription>Manage facilities and system</CardDescription>
+								</CardHeader>
+								<CardContent>
+									<Link href="/admin/facilities">
+										<Button className="w-full">
+											<Building2 className="h-4 w-4 mr-2" />
+											Manage Facilities
+										</Button>
+									</Link>
+								</CardContent>
+							</Card>
+
+							<Card>
+								<CardHeader>
+									<CardTitle>Admin Dashboard</CardTitle>
+									<CardDescription>View analytics and reports</CardDescription>
+								</CardHeader>
+								<CardContent>
+									<Link href="/admin/dashboard">
+										<Button className="w-full">
+											<BarChart3 className="h-4 w-4 mr-2" />
+											View Analytics
+										</Button>
+									</Link>
+								</CardContent>
+							</Card>
+						</>
 					)}
 
 					{session.user?.role === "coach" && (
