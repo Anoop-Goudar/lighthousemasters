@@ -1,0 +1,79 @@
+"use client";
+
+import { Menu } from "lucide-react";
+import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
+import React, { useState } from "react";
+import { NotificationDropdown } from "@/components/NotificationDropdown";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+
+export function Header() {
+	const { data: session } = useSession();
+	const [isOpen, setIsOpen] = useState(false);
+
+	const navigation = [
+		{ name: "Dashboard", href: "/dashboard" },
+		{ name: "Facilities", href: "/facilities" },
+		{ name: "Bookings", href: "/bookings" },
+	];
+
+	return (
+		<header className="bg-white shadow-sm border-b">
+			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div className="flex justify-between items-center h-16">
+					<Link href="/" className="flex items-center">
+						<h1 className="text-xl font-bold text-gray-900">Lighthouse</h1>
+					</Link>
+
+					<nav className="hidden md:flex space-x-8">
+						{navigation.map((item) => (
+							<Link key={item.name} href={item.href} className="text-gray-700 hover:text-gray-900">
+								{item.name}
+							</Link>
+						))}
+					</nav>
+
+					<div className="flex items-center space-x-4">
+						{session && <NotificationDropdown />}
+
+						{session ? (
+							<div className="flex items-center space-x-2">
+								<span className="text-sm text-gray-700">Hello, {session.user.name}</span>
+								<Button variant="outline" size="sm" onClick={() => signOut()}>
+									Sign out
+								</Button>
+							</div>
+						) : (
+							<Link href="/auth/signin">
+								<Button size="sm">Sign in</Button>
+							</Link>
+						)}
+
+						<Sheet open={isOpen} onOpenChange={setIsOpen}>
+							<SheetTrigger asChild className="md:hidden">
+								<Button variant="ghost" size="sm">
+									<Menu className="h-5 w-5" />
+								</Button>
+							</SheetTrigger>
+							<SheetContent side="right">
+								<nav className="flex flex-col space-y-4 mt-8">
+									{navigation.map((item) => (
+										<Link
+											key={item.name}
+											href={item.href}
+											className="text-gray-700 hover:text-gray-900 py-2"
+											onClick={() => setIsOpen(false)}
+										>
+											{item.name}
+										</Link>
+									))}
+								</nav>
+							</SheetContent>
+						</Sheet>
+					</div>
+				</div>
+			</div>
+		</header>
+	);
+}

@@ -72,10 +72,13 @@ export default function AdminFacilitiesPage() {
 					availabilitySchedule: [],
 				});
 				setShowCreateForm(false);
-				window.location.reload();
+				const facilitiesResponse = await fetch("/api/facilities");
+				const facilitiesData = await facilitiesResponse.json();
+				setFacilities(facilitiesData.facilities || []);
 			} else {
 				const error = await response.json();
 				console.error("Error creating facility:", error);
+				alert(`Failed to create facility: ${error.error}`);
 			}
 		} catch (error) {
 			console.error("Error creating facility:", error);
@@ -92,11 +95,14 @@ export default function AdminFacilitiesPage() {
 				method: "DELETE",
 			});
 
-		if (response.ok) {
-			window.location.reload();
+			if (response.ok) {
+				const facilitiesResponse = await fetch("/api/facilities");
+				const facilitiesData = await facilitiesResponse.json();
+				setFacilities(facilitiesData.facilities || []);
 			} else {
 				const error = await response.json();
 				console.error("Error deleting facility:", error);
+				alert(`Failed to delete facility: ${error.error}`);
 			}
 		} catch (error) {
 			console.error("Error deleting facility:", error);

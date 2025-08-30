@@ -102,6 +102,9 @@ export default function FacilitiesPage() {
 			} else {
 				const error = await response.json();
 				console.error("Error creating booking:", error);
+				alert(
+					`Booking failed: ${error.error || "Please check your booking details and try again."}`
+				);
 			}
 		} catch (error) {
 			console.error("Error creating booking:", error);

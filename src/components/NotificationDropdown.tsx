@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import { Bell, Check, Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -29,7 +29,7 @@ export function NotificationDropdown() {
 	const [unreadCount, setUnreadCount] = useState(0);
 	const [isLoading, setIsLoading] = useState(false);
 
-	const fetchNotifications = async () => {
+	const fetchNotifications = React.useCallback(async () => {
 		if (!session) return;
 
 		setIsLoading(true);
@@ -43,11 +43,11 @@ export function NotificationDropdown() {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, [session]);
 
 	useEffect(() => {
 		fetchNotifications();
-	}, [session]);
+	}, [fetchNotifications]);
 
 	const markAsRead = async (notificationId: string) => {
 		try {

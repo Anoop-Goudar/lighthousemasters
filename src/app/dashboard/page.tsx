@@ -1,13 +1,13 @@
 "use client";
 
-import { Building2, MapPin, ClipboardList, BarChart3 } from "lucide-react";
+import { BarChart3, Building2, ClipboardList, MapPin, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { NotificationDropdown } from "@/components/NotificationDropdown";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { NotificationDropdown } from "@/components/NotificationDropdown";
 
 export default function DashboardPage() {
 	const { data: session, status } = useSession();
@@ -97,7 +97,39 @@ export default function DashboardPage() {
 									</Link>
 								</CardContent>
 							</Card>
+
+							<Card>
+								<CardHeader>
+									<CardTitle>User Management</CardTitle>
+									<CardDescription>Manage user roles and permissions</CardDescription>
+								</CardHeader>
+								<CardContent>
+									<Link href="/admin/users">
+										<Button className="w-full">
+											<Users className="h-4 w-4 mr-2" />
+											Manage Users
+										</Button>
+									</Link>
+								</CardContent>
+							</Card>
 						</>
+					)}
+
+					{["admin", "coach"].includes(session.user.role) && (
+						<Card>
+							<CardHeader>
+								<CardTitle>Booking Insights</CardTitle>
+								<CardDescription>View booking analytics and trends</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<Link href="/dashboard/insights">
+									<Button className="w-full">
+										<BarChart3 className="h-4 w-4 mr-2" />
+										View Insights
+									</Button>
+								</Link>
+							</CardContent>
+						</Card>
 					)}
 
 					{session.user?.role === "coach" && (
@@ -198,15 +230,15 @@ function TrainingSessionHistory({ userId }: { userId: string }) {
 				<Card key={log._id}>
 					<CardHeader>
 						<CardTitle className="text-lg">{log.activityType}</CardTitle>
-						<CardDescription>
-							{new Date(log.sessionDate).toLocaleDateString()}
-						</CardDescription>
+						<CardDescription>{new Date(log.sessionDate).toLocaleDateString()}</CardDescription>
 					</CardHeader>
 					<CardContent>
 						{log.notes && <p className="text-sm text-gray-600 mb-2">{log.notes}</p>}
 						{log.performanceMetrics && (
 							<div className="flex gap-4 text-sm text-gray-500">
-								{log.performanceMetrics.duration && <span>{log.performanceMetrics.duration} min</span>}
+								{log.performanceMetrics.duration && (
+									<span>{log.performanceMetrics.duration} min</span>
+								)}
 								{log.performanceMetrics.rating && <span>{log.performanceMetrics.rating}/5 ⭐</span>}
 							</div>
 						)}

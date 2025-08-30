@@ -50,6 +50,8 @@ export async function POST(request: NextRequest) {
 		const body = await request.json();
 		const validatedData = CreateBookingSchema.parse({
 			...body,
+			startTime: new Date(body.startTime),
+			endTime: new Date(body.endTime),
 			userId: session.user.id,
 		});
 
