@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type Document, ObjectId, type WithId } from "mongodb";
+import { type NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import clientPromise from "@/lib/mongodb";
 import { CreateNotificationSchema } from "@/models/Notification";
-import { ObjectId } from "mongodb";
 
 export async function GET(request: NextRequest) {
 	try {
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
 		const client = await clientPromise;
 		const db = client.db();
 
-		let targetUser: any;
+		let targetUser: WithId<Document> | null = null;
 		try {
 			targetUser = await db.collection("users").findOne({
 				_id: new ObjectId(validatedData.userId),
