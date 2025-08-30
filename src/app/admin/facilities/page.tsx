@@ -17,6 +17,7 @@ export default function AdminFacilitiesPage() {
 	const [facilities, setFacilities] = useState<Facility[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [showCreateForm, setShowCreateForm] = useState(false);
+	const [editingFacility, setEditingFacility] = useState<Facility | null>(null);
 	const nameId = useId();
 	const typeId = useId();
 	const descriptionId = useId();
@@ -87,6 +88,55 @@ export default function AdminFacilitiesPage() {
 		}
 	};
 
+	const editFacility = (facility: Facility) => {
+		setEditingFacility(facility);
+		setFormData({
+			name: facility.name,
+			type: facility.type,
+			description: facility.description || "",
+			capacity: facility.capacity,
+			availabilitySchedule: facility.availabilitySchedule || [],
+		});
+		setShowCreateForm(true);
+	};
+
+	const handleUpdate = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (!editingFacility) return;
+		
+		setIsLoading(true);
+		try {
+			const response = await fetch(`/api/facilities/${editingFacility._id}`, {
+				method: "PUT",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(formData),
+			});
+
+			if (response.ok) {
+				setFormData({
+					name: "",
+					type: "court",
+					description: "",
+					capacity: 1,
+					availabilitySchedule: [],
+				});
+				setShowCreateForm(false);
+				setEditingFacility(null);
+				const facilitiesResponse = await fetch("/api/facilities");
+				const facilitiesData = await facilitiesResponse.json();
+				setFacilities(facilitiesData.facilities || []);
+			} else {
+				const error = await response.json();
+				console.error("Error updating facility:", error);
+				alert(`Failed to update facility: ${error.error}`);
+			}
+		} catch (error) {
+			console.error("Error updating facility:", error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
 	const deleteFacility = async (id: string) => {
 		if (!confirm("Are you sure you want to delete this facility?")) return;
 
@@ -137,11 +187,11 @@ export default function AdminFacilitiesPage() {
 				{showCreateForm && (
 					<Card className="mb-8">
 						<CardHeader>
-							<CardTitle>Create New Facility</CardTitle>
-							<CardDescription>Add a new facility to the system</CardDescription>
+							<CardTitle>{editingFacility ? "Edit Facility" : "Create New Facility"}</CardTitle>
+							<CardDescription>{editingFacility ? "Update facility information" : "Add a new facility to the system"}</CardDescription>
 						</CardHeader>
 						<CardContent>
-							<form onSubmit={handleSubmit} className="space-y-4">
+							<form onSubmit={editingFacility ? handleUpdate : handleSubmit} className="space-y-4">
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 									<div className="space-y-2">
 										<Label htmlFor={nameId}>Name</Label>
@@ -199,9 +249,19 @@ export default function AdminFacilitiesPage() {
 
 								<div className="flex gap-4">
 									<Button type="submit" disabled={isLoading}>
-										{isLoading ? "Creating..." : "Create Facility"}
+										{isLoading ? (editingFacility ? "Updating..." : "Creating...") : (editingFacility ? "Update Facility" : "Create Facility")}
 									</Button>
-									<Button type="button" variant="outline" onClick={() => setShowCreateForm(false)}>
+									<Button type="button" variant="outline" onClick={() => {
+										setShowCreateForm(false);
+										setEditingFacility(null);
+										setFormData({
+											name: "",
+											type: "court",
+											description: "",
+											capacity: 1,
+											availabilitySchedule: [],
+										});
+									}}>
 										Cancel
 									</Button>
 								</div>
@@ -217,7 +277,7 @@ export default function AdminFacilitiesPage() {
 								<CardTitle className="flex items-center justify-between">
 									{facility.name}
 									<div className="flex gap-2">
-										<Button size="sm" variant="outline">
+										<Button size="sm" variant="outline" onClick={() => editFacility(facility)}>
 											<Edit className="h-4 w-4" />
 										</Button>
 										<Button
