@@ -30,45 +30,46 @@ export async function GET(request: NextRequest) {
 			if (facilityId) query.facilityId = facilityId;
 		}
 
-		const bookings = await db.collection("bookings").aggregate([
-			{ $match: query },
-			{
-				$addFields: {
-					facilityObjectId: { $toObjectId: "$facilityId" },
-					userObjectId: { $toObjectId: "$userId" }
+		const bookingsRaw = await db.collection("bookings").find(query).toArray();
+		
+		const bookings = await Promise.all(
+			bookingsRaw.map(async (booking) => {
+				let facilityName = "Unknown Facility";
+				let userName = "Unknown User";
+
+				try {
+					if (booking.facilityId) {
+						const facility = await db.collection("facilities").findOne({ 
+							_id: new ObjectId(booking.facilityId) 
+						});
+						if (facility) {
+							facilityName = facility.name;
+						}
+					}
+				} catch (error) {
+					console.log("Could not fetch facility for booking:", booking._id);
 				}
-			},
-			{
-				$lookup: {
-					from: "facilities",
-					localField: "facilityObjectId",
-					foreignField: "_id",
-					as: "facility"
+
+				try {
+					if (booking.userId) {
+						const user = await db.collection("users").findOne({ 
+							id: booking.userId 
+						});
+						if (user) {
+							userName = user.name;
+						}
+					}
+				} catch (error) {
+					console.log("Could not fetch user for booking:", booking._id);
 				}
-			},
-			{
-				$lookup: {
-					from: "users",
-					localField: "userObjectId",
-					foreignField: "_id",
-					as: "user"
-				}
-			},
-			{
-				$addFields: {
-					facilityName: { $arrayElemAt: ["$facility.name", 0] },
-					userName: { $arrayElemAt: ["$user.name", 0] }
-				}
-			},
-			{
-				$project: {
-					facility: 0,
-					user: 0,
-					facilityObjectId: 0,
-					userObjectId: 0
-				}
-			}
-		]).toArray();
+
+				return {
+					...booking,
+					facilityName,
+					userName
+				};
+			})
+		);
 
 		return NextResponse.json({ bookings });
 	} catch (error) {
