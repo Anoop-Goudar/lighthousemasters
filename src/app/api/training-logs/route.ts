@@ -63,6 +63,7 @@ export async function POST(request: NextRequest) {
 		const body = await request.json();
 		const validatedData = CreateTrainingLogSchema.parse({
 			...body,
+			sessionDate: new Date(body.sessionDate), // Convert string to Date for Zod validation
 			coachId: session.user.id, // Ensure log is created by the authenticated coach
 		});
 
