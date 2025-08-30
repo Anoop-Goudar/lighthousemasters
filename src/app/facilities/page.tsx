@@ -68,6 +68,12 @@ export default function FacilitiesPage() {
 	}, []);
 
 	useEffect(() => {
+		if (facilities.length > 0 && !selectedFacility) {
+			setSelectedFacility(facilities[0]);
+		}
+	}, [facilities, selectedFacility]);
+
+	useEffect(() => {
 		if (selectedFacility) {
 			fetchBookings(selectedFacility._id!);
 		}
@@ -75,6 +81,15 @@ export default function FacilitiesPage() {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		
+		if (!isTimeSlotAvailable(formData.startTime, formData.endTime)) {
+			const conflicts = getConflictingBookings(formData.startTime, formData.endTime);
+			alert(`Time slot conflicts with existing booking(s): ${conflicts.map(b => 
+				`${format(new Date(b.startTime), "HH:mm")}-${format(new Date(b.endTime), "HH:mm")}`
+			).join(", ")}`);
+			return;
+		}
+		
 		setIsLoading(true);
 		try {
 			const response = await fetch("/api/bookings", {
@@ -126,6 +141,26 @@ export default function FacilitiesPage() {
 				format(new Date(booking.startTime), "yyyy-MM-dd") === dateStr &&
 				booking.status !== "cancelled"
 		);
+	};
+
+	const isTimeSlotAvailable = (startTime: Date, endTime: Date) => {
+		return !bookings.some(booking => {
+			if (booking.status === "cancelled") return false;
+			const bookingStart = new Date(booking.startTime);
+			const bookingEnd = new Date(booking.endTime);
+			return (
+				(startTime < bookingEnd && endTime > bookingStart)
+			);
+		});
+	};
+
+	const getConflictingBookings = (startTime: Date, endTime: Date) => {
+		return bookings.filter(booking => {
+			if (booking.status === "cancelled") return false;
+			const bookingStart = new Date(booking.startTime);
+			const bookingEnd = new Date(booking.endTime);
+			return (startTime < bookingEnd && endTime > bookingStart);
+		});
 	};
 
 	if (status === "loading") {
@@ -207,16 +242,40 @@ export default function FacilitiesPage() {
 							</CardContent>
 						</Card>
 
+						<Card className="mt-4">
+							<CardHeader>
+								<CardTitle>Select Facility</CardTitle>
+							</CardHeader>
+							<CardContent>
+								<select
+									value={selectedFacility?._id || ""}
+									onChange={(e) => {
+										const facility = facilities.find(f => f._id === e.target.value);
+										setSelectedFacility(facility || null);
+									}}
+									className="w-full h-9 px-3 rounded-md border border-input bg-background"
+								>
+									{facilities.map((facility) => (
+										<option key={facility._id} value={facility._id}>
+											{facility.name}
+										</option>
+									))}
+								</select>
+							</CardContent>
+						</Card>
+
 						{selectedFacility && (
 							<Card className="mt-4">
 								<CardHeader>
-									<CardTitle>Bookings for {format(selectedDate, "MMM dd, yyyy")}</CardTitle>
+									<CardTitle>
+										Bookings for {selectedFacility.name} - {format(selectedDate, "MMM dd, yyyy")}
+									</CardTitle>
 								</CardHeader>
 								<CardContent>
 									{getBookingsForDate(selectedDate).length > 0 ? (
 										<div className="space-y-2">
 											{getBookingsForDate(selectedDate).map((booking) => (
-												<div key={booking._id} className="flex items-center gap-2 text-sm">
+												<div key={booking._id} className="flex items-center gap-2 text-sm p-2 bg-muted rounded">
 													<Clock className="h-4 w-4" />
 													<span>
 														{format(new Date(booking.startTime), "HH:mm")} -
