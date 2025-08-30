@@ -75,14 +75,14 @@ export default function AdminUsersPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50 py-8">
+		<div className="min-h-screen bg-muted py-8">
 			<div className="max-w-6xl mx-auto px-4">
 				<div className="mb-8">
-					<h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+					<h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
 						<Users className="h-8 w-8" />
 						User Management
 					</h1>
-					<p className="text-gray-600">Manage user roles and permissions</p>
+					<p className="text-muted-foreground">Manage user roles and permissions</p>
 				</div>
 
 				<Card>
@@ -114,7 +114,7 @@ export default function AdminUsersPage() {
 																? "bg-blue-100 text-blue-800"
 																: user.role === "parent"
 																	? "bg-green-100 text-green-800"
-																	: "bg-gray-100 text-gray-800"
+																	: "bg-muted text-muted-foreground"
 													}`}
 												>
 													{user.role}

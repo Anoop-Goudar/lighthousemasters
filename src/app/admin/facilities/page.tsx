@@ -118,15 +118,15 @@ export default function AdminFacilitiesPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50 py-8">
+		<div className="min-h-screen bg-muted py-8">
 			<div className="max-w-6xl mx-auto px-4">
 				<div className="flex justify-between items-center mb-8">
 					<div>
-						<h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+						<h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
 							<Building2 className="h-8 w-8" />
 							Facility Management
 						</h1>
-						<p className="text-gray-600">Manage courts, grounds, and rooms</p>
+						<p className="text-muted-foreground">Manage courts, grounds, and rooms</p>
 					</div>
 					<Button onClick={() => setShowCreateForm(true)}>
 						<Plus className="h-4 w-4 mr-2" />
@@ -236,7 +236,7 @@ export default function AdminFacilitiesPage() {
 							</CardHeader>
 							<CardContent>
 								{facility.description && (
-									<p className="text-sm text-gray-600">{facility.description}</p>
+									<p className="text-sm text-muted-foreground">{facility.description}</p>
 								)}
 							</CardContent>
 						</Card>

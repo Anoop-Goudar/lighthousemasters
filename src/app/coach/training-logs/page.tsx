@@ -133,15 +133,15 @@ export default function CoachTrainingLogsPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50 py-8">
+		<div className="min-h-screen bg-muted py-8">
 			<div className="max-w-6xl mx-auto px-4">
 				<div className="flex justify-between items-center mb-8">
 					<div>
-						<h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+						<h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
 							<ClipboardList className="h-8 w-8" />
 							Training Log Management
 						</h1>
-						<p className="text-gray-600">Record training sessions and performance notes</p>
+						<p className="text-muted-foreground">Record training sessions and performance notes</p>
 					</div>
 					<Button onClick={() => setShowCreateForm(true)}>
 						<Plus className="h-4 w-4 mr-2" />
@@ -319,9 +319,9 @@ export default function CoachTrainingLogsPage() {
 								</CardDescription>
 							</CardHeader>
 							<CardContent>
-								{log.notes && <p className="text-sm text-gray-600 mb-2">{log.notes}</p>}
+								{log.notes && <p className="text-sm text-muted-foreground mb-2">{log.notes}</p>}
 								{log.performanceMetrics && (
-									<div className="flex gap-4 text-sm text-gray-500">
+									<div className="flex gap-4 text-sm text-muted-foreground">
 										{log.performanceMetrics.intensity && (
 											<span>Intensity: {log.performanceMetrics.intensity}/10</span>
 										)}

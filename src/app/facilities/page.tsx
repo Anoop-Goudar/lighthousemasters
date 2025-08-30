@@ -137,14 +137,14 @@ export default function FacilitiesPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50 py-8">
+		<div className="min-h-screen bg-muted py-8">
 			<div className="max-w-6xl mx-auto px-4">
 				<div className="mb-8">
-					<h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+					<h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
 						<MapPin className="h-8 w-8" />
 						Facilities & Booking
 					</h1>
-					<p className="text-gray-600">Browse and book available facilities</p>
+					<p className="text-muted-foreground">Browse and book available facilities</p>
 				</div>
 
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -170,9 +170,9 @@ export default function FacilitiesPage() {
 									</CardHeader>
 									<CardContent>
 										{facility.description && (
-											<p className="text-sm text-gray-600 mb-2">{facility.description}</p>
+											<p className="text-sm text-muted-foreground mb-2">{facility.description}</p>
 										)}
-										<div className="flex items-center gap-2 text-sm text-gray-500">
+										<div className="flex items-center gap-2 text-sm text-muted-foreground">
 											<Users className="h-4 w-4" />
 											<span>Available for booking</span>
 										</div>
@@ -225,10 +225,10 @@ export default function FacilitiesPage() {
 													<span
 														className={`px-2 py-1 rounded text-xs ${
 															booking.status === "confirmed"
-																? "bg-green-100 text-green-800"
+																? "bg-primary/10 text-primary"
 																: booking.status === "pending"
-																	? "bg-yellow-100 text-yellow-800"
-																	: "bg-gray-100 text-gray-800"
+																	? "bg-accent/10 text-accent-foreground"
+																	: "bg-muted text-muted-foreground"
 														}`}
 													>
 														{booking.status}
@@ -237,7 +237,7 @@ export default function FacilitiesPage() {
 											))}
 										</div>
 									) : (
-										<p className="text-gray-500 text-sm">No bookings for this date</p>
+										<p className="text-muted-foreground text-sm">No bookings for this date</p>
 									)}
 								</CardContent>
 							</Card>

@@ -139,15 +139,15 @@ export default function BookingInsightsPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50 py-8">
+		<div className="min-h-screen bg-muted py-8">
 			<div className="max-w-7xl mx-auto px-4">
 				<div className="flex justify-between items-center mb-8">
 					<div>
-						<h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+						<h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
 							<BarChart3 className="h-8 w-8" />
 							Booking Insights
 						</h1>
-						<p className="text-gray-600">Analytics and reports for facility bookings</p>
+						<p className="text-muted-foreground">Analytics and reports for facility bookings</p>
 					</div>
 					<Button onClick={exportToCSV} variant="outline">
 						Export CSV
@@ -253,10 +253,10 @@ export default function BookingInsightsPage() {
 												<span
 													className={`px-2 py-1 rounded text-xs ${
 														booking.status === "confirmed"
-															? "bg-green-100 text-green-800"
+															? "bg-primary/10 text-primary"
 															: booking.status === "pending"
-																? "bg-yellow-100 text-yellow-800"
-																: "bg-gray-100 text-gray-800"
+																? "bg-accent/10 text-accent-foreground"
+																: "bg-muted text-muted-foreground"
 													}`}
 												>
 													{booking.status}

@@ -56,7 +56,7 @@ export default function ProfilePage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50 py-8">
+		<div className="min-h-screen bg-muted py-8">
 			<div className="max-w-2xl mx-auto px-4">
 				<Card>
 					<CardHeader>
@@ -92,9 +92,9 @@ export default function ProfilePage() {
 									id={membershipPlanId}
 									value={formData.membershipPlan || "Free"}
 									disabled
-									className="bg-gray-50"
+									className="bg-muted"
 								/>
-								<p className="text-xs text-gray-500">
+								<p className="text-xs text-muted-foreground">
 									Currently on Free plan. Paid plan integration coming soon.
 								</p>
 							</div>

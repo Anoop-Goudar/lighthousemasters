@@ -30,7 +30,45 @@ export async function GET(request: NextRequest) {
 			if (facilityId) query.facilityId = facilityId;
 		}
 
-		const bookings = await db.collection("bookings").find(query).toArray();
+		const bookings = await db.collection("bookings").aggregate([
+			{ $match: query },
+			{
+				$addFields: {
+					facilityObjectId: { $toObjectId: "$facilityId" },
+					userObjectId: { $toObjectId: "$userId" }
+				}
+			},
+			{
+				$lookup: {
+					from: "facilities",
+					localField: "facilityObjectId",
+					foreignField: "_id",
+					as: "facility"
+				}
+			},
+			{
+				$lookup: {
+					from: "users",
+					localField: "userObjectId",
+					foreignField: "_id",
+					as: "user"
+				}
+			},
+			{
+				$addFields: {
+					facilityName: { $arrayElemAt: ["$facility.name", 0] },
+					userName: { $arrayElemAt: ["$user.name", 0] }
+				}
+			},
+			{
+				$project: {
+					facility: 0,
+					user: 0,
+					facilityObjectId: 0,
+					userObjectId: 0
+				}
+			}
+		]).toArray();
 
 		return NextResponse.json({ bookings });
 	} catch (error) {

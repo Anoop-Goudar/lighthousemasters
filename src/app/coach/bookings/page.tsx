@@ -22,9 +22,6 @@ export default function CoachBookingsPage() {
 		if (status === "unauthenticated") {
 			router.push("/auth/signin");
 		}
-		if (!["coach", "admin"].includes(session?.user?.role || "")) {
-			router.push("/unauthorized");
-		}
 	}, [session, status, router]);
 
 	useEffect(() => {
@@ -48,15 +45,15 @@ export default function CoachBookingsPage() {
 	const getStatusColor = (status: string) => {
 		switch (status) {
 			case "confirmed":
-				return "bg-green-100 text-green-800";
+				return "bg-primary/10 text-primary";
 			case "pending":
-				return "bg-yellow-100 text-yellow-800";
+				return "bg-accent/10 text-accent-foreground";
 			case "cancelled":
-				return "bg-red-100 text-red-800";
+				return "bg-destructive/10 text-destructive";
 			case "completed":
-				return "bg-blue-100 text-blue-800";
+				return "bg-secondary/10 text-secondary";
 			default:
-				return "bg-gray-100 text-gray-800";
+				return "bg-muted text-muted-foreground";
 		}
 	};
 
@@ -69,22 +66,22 @@ export default function CoachBookingsPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50 py-8">
+		<div className="min-h-screen bg-muted py-8">
 			<div className="max-w-6xl mx-auto px-4">
 				<div className="mb-8">
-					<h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+					<h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
 						<Calendar className="h-8 w-8" />
 						Bookings Management
 					</h1>
-					<p className="text-gray-600">View and manage facility bookings</p>
+					<p className="text-muted-foreground">View and manage facility bookings</p>
 				</div>
 
 				{bookings.length === 0 ? (
 					<Card>
 						<CardContent className="flex flex-col items-center justify-center py-12">
-							<Calendar className="h-12 w-12 text-gray-400 mb-4" />
-							<h3 className="text-lg font-medium text-gray-900 mb-2">No bookings yet</h3>
-							<p className="text-gray-500 text-center">
+							<Calendar className="h-12 w-12 text-muted-foreground mb-4" />
+							<h3 className="text-lg font-medium text-foreground mb-2">No bookings yet</h3>
+							<p className="text-muted-foreground text-center">
 								When users book facilities, they will appear here for you to manage.
 							</p>
 						</CardContent>
@@ -97,7 +94,7 @@ export default function CoachBookingsPage() {
 									<CardTitle className="flex items-center justify-between">
 										<div className="flex items-center gap-2">
 											<MapPin className="h-5 w-5" />
-											Facility Booking
+											{booking.facilityName || "Unknown Facility"}
 										</div>
 										<span className={`px-2 py-1 rounded text-xs ${getStatusColor(booking.status)}`}>
 											{booking.status}
@@ -112,15 +109,15 @@ export default function CoachBookingsPage() {
 								<CardContent>
 									<div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
 										<div className="flex items-center gap-2">
-											<Users className="h-4 w-4 text-gray-500" />
-											<span>User ID: {booking.userId}</span>
+											<Users className="h-4 w-4 text-muted-foreground" />
+											<span>Booked by: {booking.userName || "Unknown User"}</span>
 										</div>
 										<div className="flex items-center gap-2">
-											<MapPin className="h-4 w-4 text-gray-500" />
-											<span>Facility ID: {booking.facilityId}</span>
+											<MapPin className="h-4 w-4 text-muted-foreground" />
+											<span>Facility: {booking.facilityName || "Unknown Facility"}</span>
 										</div>
 										<div className="flex items-center gap-2">
-											<Clock className="h-4 w-4 text-gray-500" />
+											<Clock className="h-4 w-4 text-muted-foreground" />
 											<span>
 												Duration:{" "}
 												{Math.round(
@@ -133,8 +130,8 @@ export default function CoachBookingsPage() {
 										</div>
 									</div>
 									{booking.notes && (
-										<div className="mt-3 p-3 bg-gray-50 rounded-md">
-											<p className="text-sm text-gray-600">{booking.notes}</p>
+										<div className="mt-3 p-3 bg-muted rounded-md">
+											<p className="text-sm text-muted-foreground">{booking.notes}</p>
 										</div>
 									)}
 								</CardContent>

@@ -208,15 +208,15 @@ export default function AdminDashboardPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50 py-8">
+		<div className="min-h-screen bg-muted py-8">
 			<div className="max-w-7xl mx-auto px-4">
 				<div className="flex justify-between items-center mb-8">
 					<div>
-						<h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+						<h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
 							<BarChart3 className="h-8 w-8" />
 							Admin Dashboard
 						</h1>
-						<p className="text-gray-600">System analytics and reports</p>
+						<p className="text-muted-foreground">System analytics and reports</p>
 					</div>
 					<div className="flex gap-2">
 						<Button onClick={exportToCSV} variant="outline">

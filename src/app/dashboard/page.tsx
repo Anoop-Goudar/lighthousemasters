@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { NotificationDropdown } from "@/components/NotificationDropdown";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -28,14 +27,11 @@ export default function DashboardPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50 py-8">
+		<div className="min-h-screen bg-muted py-8">
 			<div className="max-w-4xl mx-auto px-4">
-				<div className="mb-8 flex justify-between items-center">
-					<div>
-						<h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-						<p className="text-gray-600">Welcome back, {session.user?.name}!</p>
-					</div>
-					<NotificationDropdown />
+				<div className="mb-8">
+					<h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+					<p className="text-muted-foreground">Welcome back, {session.user?.name}!</p>
 				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -171,7 +167,7 @@ export default function DashboardPage() {
 				</div>
 
 				<div className="mt-8">
-					<h2 className="text-2xl font-bold text-gray-900 mb-4">Recent Training Sessions</h2>
+					<h2 className="text-2xl font-bold text-foreground mb-4">Recent Training Sessions</h2>
 					<TrainingSessionHistory userId={session.user.id} />
 				</div>
 			</div>
@@ -218,7 +214,7 @@ function TrainingSessionHistory({ userId }: { userId: string }) {
 		return (
 			<Card>
 				<CardContent className="pt-6">
-					<p className="text-gray-500 text-center">No training sessions recorded yet.</p>
+					<p className="text-muted-foreground text-center">No training sessions recorded yet.</p>
 				</CardContent>
 			</Card>
 		);
@@ -233,9 +229,9 @@ function TrainingSessionHistory({ userId }: { userId: string }) {
 						<CardDescription>{new Date(log.sessionDate).toLocaleDateString()}</CardDescription>
 					</CardHeader>
 					<CardContent>
-						{log.notes && <p className="text-sm text-gray-600 mb-2">{log.notes}</p>}
+						{log.notes && <p className="text-sm text-muted-foreground mb-2">{log.notes}</p>}
 						{log.performanceMetrics && (
-							<div className="flex gap-4 text-sm text-gray-500">
+							<div className="flex gap-4 text-sm text-muted-foreground">
 								{log.performanceMetrics.duration && (
 									<span>{log.performanceMetrics.duration} min</span>
 								)}

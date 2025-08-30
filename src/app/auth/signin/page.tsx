@@ -28,7 +28,7 @@ export default function SignInPage() {
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gray-50">
+		<div className="min-h-screen flex items-center justify-center bg-muted">
 			<Card className="w-full max-w-md">
 				<CardHeader>
 					<CardTitle>Sign In</CardTitle>
@@ -44,7 +44,7 @@ export default function SignInPage() {
 						{isLoading ? "Signing in..." : "Continue with Google"}
 					</Button>
 
-					<div className="text-center text-sm text-gray-500">
+					<div className="text-center text-sm text-muted-foreground">
 						Don&apos;t have an account? Contact your administrator.
 					</div>
 				</CardContent>

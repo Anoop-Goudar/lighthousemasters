@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function UnauthorizedPage() {
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gray-50">
+		<div className="min-h-screen flex items-center justify-center bg-muted">
 			<Card className="w-full max-w-md">
 				<CardHeader>
 					<CardTitle>Access Denied</CardTitle>
@@ -12,7 +12,7 @@ export default function UnauthorizedPage() {
 				</CardHeader>
 				<CardContent>
 					<div className="space-y-4">
-						<p className="text-sm text-gray-600">
+						<p className="text-sm text-muted-foreground">
 							Please contact your administrator if you believe this is an error.
 						</p>
 						<Link href="/">
