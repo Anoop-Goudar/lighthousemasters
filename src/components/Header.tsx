@@ -12,10 +12,17 @@ export function Header() {
 	const { data: session } = useSession();
 	const [isOpen, setIsOpen] = useState(false);
 
+	const getBookingsHref = () => {
+		if (session?.user?.role === "coach" || session?.user?.role === "admin") {
+			return "/coach/bookings";
+		}
+		return "/facilities";
+	};
+
 	const navigation = [
 		{ name: "Dashboard", href: "/dashboard" },
 		{ name: "Facilities", href: "/facilities" },
-		{ name: "Bookings", href: "/bookings" },
+		{ name: "Bookings", href: getBookingsHref() },
 	];
 
 	return (
@@ -40,7 +47,7 @@ export function Header() {
 						{session ? (
 							<div className="flex items-center space-x-2">
 								<span className="text-sm text-gray-700">Hello, {session.user.name}</span>
-								<Button variant="outline" size="sm" onClick={() => signOut()}>
+								<Button variant="outline" size="sm" onClick={() => signOut({ callbackUrl: "/" })}>
 									Sign out
 								</Button>
 							</div>

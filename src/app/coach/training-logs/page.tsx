@@ -112,9 +112,13 @@ export default function CoachTrainingLogsPage() {
 			} else {
 				const error = await response.json();
 				console.error("Error creating training log:", error);
+				alert(
+					`Failed to create training log: ${error.error || "Please check your input and try again."}`
+				);
 			}
 		} catch (error) {
 			console.error("Error creating training log:", error);
+			alert("Failed to create training log. Please check your connection and try again.");
 		} finally {
 			setIsLoading(false);
 		}

@@ -90,10 +90,13 @@ export default function ProfilePage() {
 								<Label htmlFor={membershipPlanId}>Membership Plan</Label>
 								<Input
 									id={membershipPlanId}
-									value={formData.membershipPlan}
-									onChange={(e) => setFormData({ ...formData, membershipPlan: e.target.value })}
-									placeholder="No membership plan"
+									value={formData.membershipPlan || "Free"}
+									disabled
+									className="bg-gray-50"
 								/>
+								<p className="text-xs text-gray-500">
+									Currently on Free plan. Paid plan integration coming soon.
+								</p>
 							</div>
 
 							<div className="flex gap-4">
