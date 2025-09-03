@@ -16,7 +16,7 @@ export async function sendNotificationEmail(
 
 		const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #333;">Lighthouse Management System</h2>
+        <h2 style="color: #333;">Lighthouse Masters</h2>
         <h3 style="color: #555;">${subject}</h3>
         <p style="color: #666; line-height: 1.6;">${message}</p>
         ${
@@ -34,7 +34,7 @@ export async function sendNotificationEmail(
 				}
         <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
         <p style="color: #999; font-size: 12px;">
-          This is an automated message from Lighthouse Management System.
+          This is an automated message from Lighthouse Masters.
         </p>
       </div>
     `;
@@ -68,7 +68,7 @@ export async function sendBookingConfirmation(
     
     Please arrive 10 minutes early for your session.
     
-    Thank you for using Lighthouse Management System!
+    Thank you for using Lighthouse Masters!
   `;
 
 	return sendNotificationEmail(userEmail, subject, message);

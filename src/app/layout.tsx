@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "Lighthouse Management System",
+	title: "Lighthouse Masters",
 	description: "Manage your lighthouse facilities and training",
 };
 

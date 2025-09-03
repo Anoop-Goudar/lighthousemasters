@@ -1,4 +1,4 @@
-# Lighthouse Management System - Features & Testing
+# Lighthouse Masters - Features & Testing
 
 ## Currently Implemented Features
 

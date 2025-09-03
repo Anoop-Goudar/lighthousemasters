@@ -135,7 +135,7 @@ export default function AdminDashboardPage() {
 			const pdf = new jsPDF();
 
 			pdf.setFontSize(20);
-			pdf.text("Lighthouse Management System - Analytics Report", 20, 30);
+			pdf.text("Lighthouse Masters - Analytics Report", 20, 30);
 
 			pdf.setFontSize(12);
 			pdf.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, 45);
