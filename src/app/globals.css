@@ -114,22 +114,22 @@
 	--sidebar-ring: oklch(0.65 0.18 142);
 }
 
-	@layer base {
-		* {
-			@apply border-border outline-ring/50;
-		}
-		body {
-			@apply bg-background text-foreground;
-		}
-		
-		.card {
-			@apply shadow-sm hover:shadow-md transition-shadow duration-200;
-		}
-		
-		.btn-primary {
-			@apply shadow-sm hover:shadow-md transition-all duration-200;
-		}
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
 	}
+	body {
+		@apply bg-background text-foreground;
+	}
+
+	.card {
+		@apply shadow-sm hover:shadow-md transition-shadow duration-200;
+	}
+
+	.btn-primary {
+		@apply shadow-sm hover:shadow-md transition-all duration-200;
+	}
+}
 
 .react-calendar {
 	width: 100%;

@@ -9,8 +9,20 @@ export const authOptions: NextAuthOptions = {
 		GoogleProvider({
 			clientId: process.env.GOOGLE_CLIENT_ID || "",
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+			authorization: {
+				params: {
+					prompt: "select_account",
+					access_type: "offline",
+					response_type: "code",
+					ux_mode: "redirect",
+				},
+			},
 		}),
 	],
+	session: {
+		strategy: "jwt",
+		maxAge: 12 * 60 * 60, // 12 hours
+	},
 	callbacks: {
 		async session({ session, token }) {
 			if (session.user && token.sub) {
@@ -28,6 +40,10 @@ export const authOptions: NextAuthOptions = {
 				}
 			}
 			return session;
+		},
+		async jwt({ token, user }) {
+			if (user) token.id = user.id;
+			return token;
 		},
 		async signIn({ user, account }) {
 			if (account?.provider === "google") {
@@ -52,11 +68,18 @@ export const authOptions: NextAuthOptions = {
 			}
 			return true;
 		},
+		async redirect({ url, baseUrl }) {
+			// Allows relative callback URLs
+			if (url.startsWith("/")) return `${baseUrl}${url}`;
+			// Allows callback URLs on the same origin
+			else if (new URL(url).origin === baseUrl) return url;
+			return baseUrl;
+		},
 	},
-	pages: {
-		signIn: "/auth/signin",
-	},
-	session: {
-		strategy: "jwt",
-	},
+	// REMOVED: pages configuration that was causing the redirect loop
+	// pages: {
+	//     signIn: "/auth/signin",
+	// },
+	secret: process.env.NEXTAUTH_SECRET,
+	debug: process.env.NODE_ENV === "development",
 };

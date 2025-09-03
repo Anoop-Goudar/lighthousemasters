@@ -103,7 +103,7 @@ export default function AdminFacilitiesPage() {
 	const handleUpdate = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!editingFacility) return;
-		
+
 		setIsLoading(true);
 		try {
 			const response = await fetch(`/api/facilities/${editingFacility._id}`, {
@@ -188,7 +188,11 @@ export default function AdminFacilitiesPage() {
 					<Card className="mb-8">
 						<CardHeader>
 							<CardTitle>{editingFacility ? "Edit Facility" : "Create New Facility"}</CardTitle>
-							<CardDescription>{editingFacility ? "Update facility information" : "Add a new facility to the system"}</CardDescription>
+							<CardDescription>
+								{editingFacility
+									? "Update facility information"
+									: "Add a new facility to the system"}
+							</CardDescription>
 						</CardHeader>
 						<CardContent>
 							<form onSubmit={editingFacility ? handleUpdate : handleSubmit} className="space-y-4">
@@ -249,19 +253,29 @@ export default function AdminFacilitiesPage() {
 
 								<div className="flex gap-4">
 									<Button type="submit" disabled={isLoading}>
-										{isLoading ? (editingFacility ? "Updating..." : "Creating...") : (editingFacility ? "Update Facility" : "Create Facility")}
+										{isLoading
+											? editingFacility
+												? "Updating..."
+												: "Creating..."
+											: editingFacility
+												? "Update Facility"
+												: "Create Facility"}
 									</Button>
-									<Button type="button" variant="outline" onClick={() => {
-										setShowCreateForm(false);
-										setEditingFacility(null);
-										setFormData({
-											name: "",
-											type: "court",
-											description: "",
-											capacity: 1,
-											availabilitySchedule: [],
-										});
-									}}>
+									<Button
+										type="button"
+										variant="outline"
+										onClick={() => {
+											setShowCreateForm(false);
+											setEditingFacility(null);
+											setFormData({
+												name: "",
+												type: "court",
+												description: "",
+												capacity: 1,
+												availabilitySchedule: [],
+											});
+										}}
+									>
 										Cancel
 									</Button>
 								</div>

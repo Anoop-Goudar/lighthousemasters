@@ -35,7 +35,11 @@ export function Header() {
 
 					<nav className="hidden md:flex space-x-8">
 						{navigation.map((item) => (
-							<Link key={item.name} href={item.href} className="text-muted-foreground hover:text-foreground transition-colors">
+							<Link
+								key={item.name}
+								href={item.href}
+								className="text-muted-foreground hover:text-foreground transition-colors"
+							>
 								{item.name}
 							</Link>
 						))}

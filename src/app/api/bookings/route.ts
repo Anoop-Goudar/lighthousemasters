@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 		}
 
 		const bookingsRaw = await db.collection("bookings").find(query).toArray();
-		
+
 		const bookings = await Promise.all(
 			bookingsRaw.map(async (booking) => {
 				let facilityName = "Unknown Facility";
@@ -39,8 +39,8 @@ export async function GET(request: NextRequest) {
 
 				try {
 					if (booking.facilityId) {
-						const facility = await db.collection("facilities").findOne({ 
-							_id: new ObjectId(booking.facilityId) 
+						const facility = await db.collection("facilities").findOne({
+							_id: new ObjectId(booking.facilityId),
 						});
 						if (facility) {
 							facilityName = facility.name;
@@ -52,8 +52,8 @@ export async function GET(request: NextRequest) {
 
 				try {
 					if (booking.userId) {
-						const user = await db.collection("users").findOne({ 
-							id: booking.userId 
+						const user = await db.collection("users").findOne({
+							id: booking.userId,
 						});
 						if (user) {
 							userName = user.name;
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
 				return {
 					...booking,
 					facilityName,
-					userName
+					userName,
 				};
 			})
 		);
